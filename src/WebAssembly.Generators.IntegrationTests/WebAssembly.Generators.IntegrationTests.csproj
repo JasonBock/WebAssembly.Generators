@@ -10,10 +10,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <!--<PackageReference Include="WebAssembly" Version="0.9.0-preview" />-->
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebAssembly.Generators\WebAssembly.Generators.csproj" OutputItemType="Analyzer" />
+    <ProjectReference Include="..\WebAssembly.Generators\WebAssembly.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="collatz.wasm" />
