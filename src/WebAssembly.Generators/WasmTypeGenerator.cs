@@ -7,7 +7,7 @@ namespace WebAssembly.Generators
 	internal sealed class WasmTypeGenerator
 		: ISourceGenerator
 	{
-		private const string ClassNameOption = "build_metadata.additionalfiles.ClassName";
+		private const string ClassNameOption = "build_metadata.AdditionalFiles.ClassName";
 
 		public void Execute(GeneratorExecutionContext context)
 		{
@@ -15,13 +15,15 @@ namespace WebAssembly.Generators
 			{
 				if (Path.GetExtension(additionalText.Path).ToLower() == ".wasm")
 				{
-					if(!context.AnalyzerConfigOptions.GetOptions(additionalText)
-						.TryGetValue(WasmTypeGenerator.ClassNameOption, out var className))
+					context.AnalyzerConfigOptions.GetOptions(additionalText)
+						.TryGetValue(WasmTypeGenerator.ClassNameOption, out var className);
+
+					if (string.IsNullOrWhiteSpace(className))
 					{
 						className = Path.GetFileNameWithoutExtension(additionalText.Path);
 					}
 
-					var text = WasmTypeBuilder.Build(additionalText.Path, className);
+					var text = WasmTypeBuilder.Build(additionalText.Path, className!);
 					context.AddSource($"{className}.g.cs", text);
 				}
 			}
