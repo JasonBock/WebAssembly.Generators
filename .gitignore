@@ -239,3 +239,6 @@ Rocks.Task Output/
 
 # Benchmark
 BenchmarkDotNet.Artifacts/
+
+# MSBuild log file
+*.binlog
