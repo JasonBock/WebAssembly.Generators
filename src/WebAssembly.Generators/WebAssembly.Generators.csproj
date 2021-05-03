@@ -4,13 +4,10 @@
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Description>Generates code for the WebAssembly package.</Description>
-    <!--<DevelopmentDependency>true</DevelopmentDependency>-->
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <!--<IncludeBuildOutput>false</IncludeBuildOutput>-->
     <IncludeSymbols>true</IncludeSymbols>
     <IsPackable>true</IsPackable>
-    <!--<NoPackageAnalysis>true</NoPackageAnalysis>-->
     <PackageId>WebAssembly.Generators</PackageId>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/jasonbock/webassembly.generators</PackageProjectUrl>
@@ -18,7 +15,6 @@
     <PackageVersion>$(Version)</PackageVersion>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryUrl>https://github.com/jasonbock/webassembly.generators</RepositoryUrl>
-    <!--<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>-->
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <TargetFramework>netstandard2.0</TargetFramework>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);_AddGeneratorsToOutput</TargetsForTfmSpecificContentInPackage>

@@ -10,19 +10,30 @@ namespace WebAssembly.Generators
 {
 	internal static class WasmTypeBuilder
 	{
-		internal static SourceText Build(string wasmPath, string className)
+		internal static SourceText Build(string wasmPath, string className, string? @namespace = null)
 		{
 			var module = Module.ReadFromBinary(wasmPath);
 
 			using var writer = new StringWriter();
 			using var indentWriter = new IndentedTextWriter(writer, "\t");
 
+			if(!string.IsNullOrWhiteSpace(@namespace))
+			{
+				indentWriter.WriteLine($"namespace {@namespace}");
+				indentWriter.WriteLine("{");
+				indentWriter.Indent++;
+			}
+
 			indentWriter.WriteLine($"public abstract class {className}");
 			indentWriter.WriteLine("{");
 			WasmTypeBuilder.BuildMethods(module, indentWriter);
 			indentWriter.WriteLine("}");
 
-			// TODO: Should we have some way to create a "GetImports"?
+			if (!string.IsNullOrWhiteSpace(@namespace))
+			{
+				indentWriter.Indent--;
+				indentWriter.WriteLine("}");
+			}
 
 			return SourceText.From(writer.ToString(), Encoding.UTF8);
 		}

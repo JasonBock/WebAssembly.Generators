@@ -8,6 +8,7 @@ namespace WebAssembly.Generators
 		: ISourceGenerator
 	{
 		private const string ClassNameOption = "build_metadata.AdditionalFiles.ClassName";
+		private const string NamespaceOption = "build_metadata.AdditionalFiles.Namespace";
 
 		public void Execute(GeneratorExecutionContext context)
 		{
@@ -15,15 +16,16 @@ namespace WebAssembly.Generators
 			{
 				if (Path.GetExtension(additionalText.Path).ToLower() == ".wasm")
 				{
-					context.AnalyzerConfigOptions.GetOptions(additionalText)
-						.TryGetValue(WasmTypeGenerator.ClassNameOption, out var className);
+					var options = context.AnalyzerConfigOptions.GetOptions(additionalText);
+					options.TryGetValue(WasmTypeGenerator.ClassNameOption, out var className);
+					options.TryGetValue(WasmTypeGenerator.NamespaceOption, out var @namespace);
 
 					if (string.IsNullOrWhiteSpace(className))
 					{
 						className = Path.GetFileNameWithoutExtension(additionalText.Path);
 					}
 
-					var text = WasmTypeBuilder.Build(additionalText.Path, className!);
+					var text = WasmTypeBuilder.Build(additionalText.Path, className!, @namespace);
 					context.AddSource($"{className}.g.cs", text);
 				}
 			}

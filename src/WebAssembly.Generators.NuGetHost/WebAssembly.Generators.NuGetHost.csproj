@@ -7,7 +7,7 @@
     <None Remove="collatz.wasm" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="collatz.wasm" ClassName="CollatzTest">
+    <AdditionalFiles Include="collatz.wasm" ClassName="CollatzTest" Namespace="GeneratedCollatz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
   </ItemGroup>

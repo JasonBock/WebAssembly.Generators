@@ -15,6 +15,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAssembly.Generators.Tests", "WebAssembly.Generators.Tests\WebAssembly.Generators.Tests.csproj", "{4BB5BCA9-1396-4B48-8D16-E87097E0EFF1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAssembly.Generators.NuGetHost", "WebAssembly.Generators.NuGetHost\WebAssembly.Generators.NuGetHost.csproj", "{E05DB587-9A7A-429E-8B19-04479FE727C0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B54503DB-0B7C-4A5D-9998-B3EC61B8623D} = {B54503DB-0B7C-4A5D-9998-B3EC61B8623D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
