@@ -60,7 +60,8 @@ namespace WebAssembly.Generators
 
 				foreach(var import in imports)
 				{
-					writer.WriteLine($"{{ \"{import.Module}\", \"{import.Field}\", new FunctionImport(callbacks.{import.Field})) }}");
+					// TODO: FunctionImport needs a Delegate with either an Action or Func
+					writer.WriteLine($"{{ \"{import.Module}\", \"{import.Field}\", new FunctionImport(imports.{import.Field})) }}");
 				}
 
 				writer.Indent--;
