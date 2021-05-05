@@ -5,9 +5,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="collatz.wasm" />
+    <None Remove="collatzWithCallback.wasm" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="collatz.wasm" ClassName="CollatzTest" Namespace="GeneratedCollatz">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+    <AdditionalFiles Include="collatzWithCallback.wasm" ClassName="CollatzWithCallbacksTest" Namespace="GeneratedCollatz">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
   </ItemGroup>

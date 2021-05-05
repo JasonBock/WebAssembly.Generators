@@ -8,6 +8,12 @@ namespace WebAssembly.Generators.Tests
 	public static class WasmTypeBuilderTests
 	{
 		[Test]
+		public static void BuildWithImport()
+		{
+			// TODO...
+		}
+
+		[Test]
 		public static void BuildWithSingleExportSingleParameter()
 		{
 			var module = new Module();
@@ -31,8 +37,9 @@ namespace WebAssembly.Generators.Tests
 
 			try
 			{
-				var text = WasmTypeBuilder.Build(fileName, "TestClass");
-				Assert.That(text.Lines.Count, Is.GreaterThan(0));
+				var (exportText, importText) = WasmTypeBuilder.Build(fileName, "TestClass");
+				Assert.That(exportText.Lines.Count, Is.GreaterThan(0));
+				Assert.That(importText, Is.Null);
 			}
 			finally
 			{
@@ -64,8 +71,9 @@ namespace WebAssembly.Generators.Tests
 
 			try
 			{
-				var text = WasmTypeBuilder.Build(fileName, "TestClass");
-				Assert.That(text.Lines.Count, Is.GreaterThan(0));
+				var (exportText, importText) = WasmTypeBuilder.Build(fileName, "TestClass");
+				Assert.That(exportText.Lines.Count, Is.GreaterThan(0));
+				Assert.That(importText, Is.Null);
 			}
 			finally
 			{
@@ -98,8 +106,9 @@ namespace WebAssembly.Generators.Tests
 
 			try
 			{
-				var text = WasmTypeBuilder.Build(fileName, "TestClass");
-				Assert.That(text.Lines.Count, Is.GreaterThan(0));
+				var (exportText, importText) = WasmTypeBuilder.Build(fileName, "TestClass");
+				Assert.That(exportText.Lines.Count, Is.GreaterThan(0));
+				Assert.That(importText, Is.Null);
 			}
 			finally
 			{
@@ -132,8 +141,9 @@ namespace WebAssembly.Generators.Tests
 
 			try
 			{
-				var text = WasmTypeBuilder.Build(fileName, "TestClass");
-				Assert.That(text.Lines.Count, Is.GreaterThan(0));
+				var (exportText, importText) = WasmTypeBuilder.Build(fileName, "TestClass");
+				Assert.That(exportText.Lines.Count, Is.GreaterThan(0));
+				Assert.That(importText, Is.Null);
 			}
 			finally
 			{

@@ -25,8 +25,13 @@ namespace WebAssembly.Generators
 						className = Path.GetFileNameWithoutExtension(additionalText.Path);
 					}
 
-					var text = WasmTypeBuilder.Build(additionalText.Path, className!, @namespace);
-					context.AddSource($"{className}.g.cs", text);
+					var (export, import) = WasmTypeBuilder.Build(additionalText.Path, className!, @namespace);
+					context.AddSource($"{className}.g.cs", export);
+
+					if(import is not null)
+					{
+						// TODO: AddSource for import.
+					}
 				}
 			}
 		}
