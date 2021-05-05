@@ -60,7 +60,7 @@ namespace WebAssembly.Generators
 
 				foreach(var import in imports)
 				{
-					writer.WriteLine($"{{ \"{import.Module}\", \"{import.Field}\", new FunctionImport(new Action<int>(value => callbacks.collatzCallback(value))) }}");
+					writer.WriteLine($"{{ \"{import.Module}\", \"{import.Field}\", new FunctionImport(callbacks.{import.Field})) }}");
 				}
 
 				writer.Indent--;
@@ -89,7 +89,7 @@ namespace WebAssembly.Generators
 			for (var i = 0; i < exports.Count; i++)
 			{
 				var export = exports[i];
-				var function = module.Functions[(int)export.Index];
+				var function = module.Functions[(int)export.Index - module.Imports.Count];
 				var type = module.Types[(int)function.Type];
 				var parameters = string.Join(", ", GetParameters(type.Parameters));
 				writer.WriteLine($"public abstract {(type.Returns.Count > 0 ? type.Returns[0].GetCSharpName() : "void")} {export.Name}({parameters});");
