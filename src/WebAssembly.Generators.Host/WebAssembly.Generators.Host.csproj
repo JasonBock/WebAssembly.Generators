@@ -4,28 +4,19 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="collatz.wasm" />
-  </ItemGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="collatz.wasm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Namespace>GeneratedCollatz</Namespace>
-      <ClassName>CollatzTest</ClassName>
-    </AdditionalFiles>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\WebAssembly.Generators\WebAssembly.Generators.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="collatzWithCallback.wasm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Namespace>GeneratedCollatz</Namespace>
-      <ClassName>CollatzWithCallbacksTest</ClassName>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />
     <PackageReference Include="WebAssembly" Version="0.9.0-preview" PrivateAssets="all" GeneratePathProperty="true" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="collatz.wasm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="collatzWithCallback.wasm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

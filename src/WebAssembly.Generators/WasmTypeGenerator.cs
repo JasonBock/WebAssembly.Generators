@@ -30,7 +30,7 @@ namespace WebAssembly.Generators
 
 					if(import is not null)
 					{
-						// TODO: AddSource for import.
+						context.AddSource($"{WasmImportBuilder.GetImportClassName(className!)}.g.cs", import);
 					}
 				}
 			}

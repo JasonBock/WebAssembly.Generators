@@ -13,6 +13,16 @@ namespace WebAssembly.Generators
 			using var writer = new StringWriter();
 			using var indentWriter = new IndentedTextWriter(writer, "\t");
 
+			var imports = module.Imports.OfType<Import.Function>().ToList();
+
+			if (imports.Count > 0)
+			{
+				indentWriter.WriteLine("using System;");
+			}
+
+			indentWriter.WriteLine("using WebAssembly.Runtime;");
+			indentWriter.WriteLine();
+
 			if (!string.IsNullOrWhiteSpace(@namespace))
 			{
 				indentWriter.WriteLine($"namespace {@namespace}");
@@ -25,7 +35,7 @@ namespace WebAssembly.Generators
 			indentWriter.Indent++;
 			WasmExportBuilder.BuildExportMethods(module, indentWriter);
 			indentWriter.WriteLine();
-			WasmExportBuilder.BuildCreateMethod(module, indentWriter, className, path);
+			WasmExportBuilder.BuildCreateMethod(module, indentWriter, imports, className, path);
 			indentWriter.Indent--;
 			indentWriter.WriteLine("}");
 
@@ -38,30 +48,29 @@ namespace WebAssembly.Generators
 			return writer.ToString();
 		}
 
-		private static void BuildCreateMethod(Module module, IndentedTextWriter writer, string className, string path)
+		private static void BuildCreateMethod(Module module, IndentedTextWriter writer, 
+			List<Import.Function> imports, string className, string path)
 		{
-			var imports = module.Imports.OfType<Import.Function>().ToList();
-
 			if (imports.Count == 0)
 			{
-				writer.WriteLine($"public static {className} Create(string path = \"{path}\") =>");
+				writer.WriteLine($"public static {className} Create(string path = @\"{path}\") =>");
 				writer.Indent++;
-				writer.WriteLine($"Compile.FromBinary<{className}>(\"{path}\")(new ImportDictionary()).Exports;");
+				writer.WriteLine($"Compile.FromBinary<{className}>(@\"{path}\")(new ImportDictionary()).Exports;");
 				writer.Indent--;
 			}
 			else
 			{
 				var importClassName = WasmImportBuilder.GetImportClassName(className);
-				writer.WriteLine($"public static {className} Create({importClassName} imports, string path = \"{path}\") =>");
+				writer.WriteLine($"public static {className} Create({importClassName} imports, string path = @\"{path}\") =>");
 				writer.Indent++;
-				writer.WriteLine($"Compile.FromBinary<{className}>(\"{path}\")(new ImportDictionary");
+				writer.WriteLine($"Compile.FromBinary<{className}>(@\"{path}\")(new ImportDictionary");
 				writer.WriteLine("{");
 				writer.Indent++;
 
 				foreach(var import in imports)
 				{
-					// TODO: FunctionImport needs a Delegate with either an Action or Func
-					writer.WriteLine($"{{ \"{import.Module}\", \"{import.Field}\", new FunctionImport(imports.{import.Field})) }}");
+					var importType = module.Types[(int)import.TypeIndex];
+					writer.WriteLine($"{{ \"{import.Module}\", \"{import.Field}\", {importType.GetFunctionImportCreationCode(import.Field)} }}");
 				}
 
 				writer.Indent--;

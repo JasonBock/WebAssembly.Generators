@@ -14,10 +14,14 @@
   <ItemGroup>
     <ProjectReference Include="..\WebAssembly.Generators\WebAssembly.Generators.csproj" OutputItemType="Analyzer" />
   </ItemGroup>
+  <!-- Manually reference the generator props because we locally reference the generator. When added via NuGet this happens automatically -->
+  <Import Project="..\WebAssembly.Generators\WebAssembly.Generators.props" />
   <ItemGroup>
     <None Remove="collatz.wasm" />
+    <None Remove="collatzWithCallback.wasm" />
   </ItemGroup>
   <ItemGroup>
-    <AdditionalFiles Include="collatz.wasm" />
+    <AdditionalFiles Include="collatz.wasm" ClassName="CollatzTest" Namespace="GeneratedCollatz" />
+    <AdditionalFiles Include="collatzWithCallback.wasm" ClassName="CollatzWithCallbackTest" Namespace="GeneratedCollatz" />
   </ItemGroup>
 </Project>
