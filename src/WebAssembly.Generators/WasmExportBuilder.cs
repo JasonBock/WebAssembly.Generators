@@ -40,6 +40,8 @@ namespace WebAssembly.Generators
 			indentWriter.WriteLine();
 			WasmExportBuilder.BuildCreateMethod(module, indentWriter, className, path);
 			indentWriter.WriteLine();
+			WasmExportBuilder.BuildGlobalProperties(module, indentWriter);
+			indentWriter.WriteLine();
 			WasmExportBuilder.BuildDisposeMethod(indentWriter);
 			indentWriter.Indent--;
 			indentWriter.WriteLine("}");
@@ -110,11 +112,20 @@ namespace WebAssembly.Generators
 				writer.WriteLine("}");
 			}
 		}
+		private static void BuildGlobalProperties(Module module, IndentedTextWriter writer)
+		{
+			var exports = module.Exports.Where(_ => _.Kind == ExternalKind.Global).ToList();
+
+			foreach(var export in exports)
+			{
+				var global = module.Globals[(int)export.Index];
+				var accessors = $"get; {(global.IsMutable ? "set;" : string.Empty)}";
+				writer.WriteLine($"public abstract {global.ContentType.GetCSharpName()} {export.Name} {{ {accessors} }}");
+			}
+		}
 
 		private static void BuildExportMethods(Module module, IndentedTextWriter writer)
 		{
-			// TODO: May want to include these:
-			// https://github.com/RyanLamansky/dotnet-webassembly/blob/main/Examples/GenerateClassFromWasm/Program.cs#L53
 			static IEnumerable<string> GetParameters(IList<WebAssemblyValueType> parameters)
 			{
 				var count = 0;
