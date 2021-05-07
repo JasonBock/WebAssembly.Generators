@@ -13,14 +13,11 @@ namespace WebAssembly.Generators
 			using var writer = new StringWriter();
 			using var indentWriter = new IndentedTextWriter(writer, "\t");
 
-			var imports = module.Imports.OfType<Import.Function>().ToList();
-
-			if (imports.Count > 0)
-			{
-				indentWriter.WriteLine("using System;");
-			}
-
+			indentWriter.WriteLine("using System;");
+			indentWriter.WriteLine("using WebAssembly;");
 			indentWriter.WriteLine("using WebAssembly.Runtime;");
+			indentWriter.WriteLine();
+			indentWriter.WriteLine("#nullable enable");
 			indentWriter.WriteLine();
 
 			if (!string.IsNullOrWhiteSpace(@namespace))
@@ -31,11 +28,30 @@ namespace WebAssembly.Generators
 			}
 
 			indentWriter.WriteLine($"public abstract class {className}");
+			indentWriter.Indent++;
+			indentWriter.WriteLine(": IDisposable");
+			indentWriter.Indent--;
 			indentWriter.WriteLine("{");
 			indentWriter.Indent++;
+			indentWriter.WriteLine("private bool disposed;");
+			indentWriter.WriteLine($"private Instance<{className}>? capturedInstance;");
+			indentWriter.WriteLine();
 			WasmExportBuilder.BuildExportMethods(module, indentWriter);
 			indentWriter.WriteLine();
-			WasmExportBuilder.BuildCreateMethod(module, indentWriter, imports, className, path);
+			WasmExportBuilder.BuildCreateMethod(module, indentWriter, className, path);
+			indentWriter.WriteLine();
+			indentWriter.WriteLine("public void Dispose()");
+			indentWriter.WriteLine("{");
+			indentWriter.Indent++;
+			indentWriter.WriteLine("if (!this.disposed)");
+			indentWriter.WriteLine("{");
+			indentWriter.Indent++;
+			indentWriter.WriteLine("this.disposed = true;");
+			indentWriter.WriteLine("this.capturedInstance?.Dispose();");
+			indentWriter.Indent--;
+			indentWriter.WriteLine("}");
+			indentWriter.Indent--;
+			indentWriter.WriteLine("}");
 			indentWriter.Indent--;
 			indentWriter.WriteLine("}");
 
@@ -48,22 +64,29 @@ namespace WebAssembly.Generators
 			return writer.ToString();
 		}
 
-		private static void BuildCreateMethod(Module module, IndentedTextWriter writer, 
-			List<Import.Function> imports, string className, string path)
+		private static void BuildCreateMethod(Module module, IndentedTextWriter writer, string className, string path)
 		{
+			var imports = module.Imports.OfType<Import.Function>().ToList();
+
 			if (imports.Count == 0)
 			{
-				writer.WriteLine($"public static {className} Create(string path = @\"{path}\") =>");
+				writer.WriteLine($"public static {className} Create(string path = @\"{path}\")");
+				writer.WriteLine("{");
 				writer.Indent++;
-				writer.WriteLine($"Compile.FromBinary<{className}>(@\"{path}\")(new ImportDictionary()).Exports;");
+				writer.WriteLine($"var instance = Compile.FromBinary<{className}>(@\"{path}\")(new ImportDictionary());");
+				writer.WriteLine("var exports = instance.Exports;");
+				writer.WriteLine("exports.capturedInstance = instance;");
+				writer.WriteLine("return exports;");
 				writer.Indent--;
+				writer.WriteLine("}");
 			}
 			else
 			{
 				var importClassName = WasmImportBuilder.GetImportClassName(className);
-				writer.WriteLine($"public static {className} Create({importClassName} imports, string path = @\"{path}\") =>");
+				writer.WriteLine($"public static {className} Create({importClassName} imports, string path = @\"{path}\")");
+				writer.WriteLine("{");
 				writer.Indent++;
-				writer.WriteLine($"Compile.FromBinary<{className}>(@\"{path}\")(new ImportDictionary");
+				writer.WriteLine($"var instance = Compile.FromBinary<{className}>(@\"{path}\")(new ImportDictionary");
 				writer.WriteLine("{");
 				writer.Indent++;
 
@@ -74,8 +97,12 @@ namespace WebAssembly.Generators
 				}
 
 				writer.Indent--;
-				writer.WriteLine("}).Exports;");
+				writer.WriteLine("});");
+				writer.WriteLine("var exports = instance.Exports;");
+				writer.WriteLine("exports.capturedInstance = instance;");
+				writer.WriteLine("return exports;");
 				writer.Indent--;
+				writer.WriteLine("}");
 			}
 		}
 
