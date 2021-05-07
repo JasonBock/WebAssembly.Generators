@@ -34,9 +34,9 @@ Console.Out.WriteLine(string.Join(", ", callbacks.Numbers));
 public sealed class CollatzImports 
   : CollatzWithCallbackTestImports
 {
-	public override void collatzCallback(int a0) => this.Numbers.Add(a0);
+  public override void collatzCallback(int a0) => this.Numbers.Add(a0);
 
-	public List<int> Numbers { get; } = new();
+  public List<int> Numbers { get; } = new();
 }
 ```
 
