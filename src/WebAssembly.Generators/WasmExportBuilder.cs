@@ -40,6 +40,21 @@ namespace WebAssembly.Generators
 			indentWriter.WriteLine();
 			WasmExportBuilder.BuildCreateMethod(module, indentWriter, className, path);
 			indentWriter.WriteLine();
+			WasmExportBuilder.BuildDisposeMethod(indentWriter);
+			indentWriter.Indent--;
+			indentWriter.WriteLine("}");
+
+			if (!string.IsNullOrWhiteSpace(@namespace))
+			{
+				indentWriter.Indent--;
+				indentWriter.WriteLine("}");
+			}
+
+			return writer.ToString();
+		}
+
+		private static void BuildDisposeMethod(IndentedTextWriter indentWriter)
+		{
 			indentWriter.WriteLine("public void Dispose()");
 			indentWriter.WriteLine("{");
 			indentWriter.Indent++;
@@ -52,16 +67,6 @@ namespace WebAssembly.Generators
 			indentWriter.WriteLine("}");
 			indentWriter.Indent--;
 			indentWriter.WriteLine("}");
-			indentWriter.Indent--;
-			indentWriter.WriteLine("}");
-
-			if (!string.IsNullOrWhiteSpace(@namespace))
-			{
-				indentWriter.Indent--;
-				indentWriter.WriteLine("}");
-			}
-
-			return writer.ToString();
 		}
 
 		private static void BuildCreateMethod(Module module, IndentedTextWriter writer, string className, string path)
