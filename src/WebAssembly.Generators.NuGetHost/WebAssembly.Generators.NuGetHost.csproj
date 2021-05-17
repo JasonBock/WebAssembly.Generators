@@ -12,7 +12,7 @@
     <AdditionalFiles Include="collatzWithCallback.wasm" ClassName="CollatzWithCallbackTest" Namespace="GeneratedCollatz" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="WebAssembly" Version="0.9.0-preview" PrivateAssets="all" GeneratePathProperty="true" />
-    <PackageReference Include="WebAssembly.Generators" Version="0.1.0" />
+    <PackageReference Include="WebAssembly" Version="1.1.0" PrivateAssets="all" GeneratePathProperty="true" />
+    <PackageReference Include="WebAssembly.Generators" Version="0.2.0" />
   </ItemGroup>
 </Project>
