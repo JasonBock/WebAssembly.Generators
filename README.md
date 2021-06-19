@@ -40,8 +40,6 @@ public sealed class CollatzImports
 }
 ```
 
-Right now, this source generator refers to `0.9.0` of `WebAssembly` as it targets .NET Standard 2.0. If a future version of `WebAssembly` targets .NET Standard 2.0, I'll switch to that version.
-
 ## Project Layout
 
 Here's a brief description of the projects. Note that this will probably change over time.
