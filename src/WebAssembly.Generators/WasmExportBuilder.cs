@@ -100,7 +100,7 @@ namespace WebAssembly.Generators
 				foreach(var import in imports)
 				{
 					var importType = module.Types[(int)import.TypeIndex];
-					writer.WriteLine($"{{ \"{import.Module}\", \"{import.Field}\", {importType.GetFunctionImportCreationCode(import.Field)} }}");
+					writer.WriteLine($"{{ \"{import.Module}\", \"{import.Field}\", {importType.GetFunctionImportCreationCode(import.Field)} }},");
 				}
 
 				writer.Indent--;

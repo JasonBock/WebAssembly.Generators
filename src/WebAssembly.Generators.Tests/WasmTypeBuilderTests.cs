@@ -10,7 +10,26 @@ namespace WebAssembly.Generators.Tests
 		[Test]
 		public static void BuildWithImport()
 		{
-			// TODO...
+			var module = new Module();
+			module.Types.Add(new());
+			module.Functions.Add(new() { Type = 0 });
+			module.Imports.Add(new Import.Function("m", "f", 0));
+
+			var fileName = $"{Guid.NewGuid():N}.wasm";
+			using (var writer = new StreamWriter(fileName))
+			{
+				module.WriteToBinary(writer.BaseStream);
+			}
+
+			try
+			{
+				var (exportText, importText) = WasmTypeBuilder.Build(fileName, "TestClass");
+				Assert.That(exportText!.ToString(), Contains.Substring("{ \"m\", \"f\", new FunctionImport(new Action(imports.f)) },"));
+			}
+			finally
+			{
+				File.Delete(fileName);
+			}
 		}
 
 		[Test]
@@ -30,7 +49,7 @@ namespace WebAssembly.Generators.Tests
 			module.Exports.Add(new() { Index = 0, Kind = ExternalKind.Function, Name = "Test" });
 
 			var fileName = $"{Guid.NewGuid():N}.wasm";
-			using(var writer = new StreamWriter(fileName))
+			using (var writer = new StreamWriter(fileName))
 			{
 				module.WriteToBinary(writer.BaseStream);
 			}
